@@ -1,6 +1,7 @@
 import { FlatCompat } from "@eslint/eslintrc";
 import js from "@eslint/js";
 import checkFile from "eslint-plugin-check-file";
+import n from "eslint-plugin-n";
 import { defineConfig } from "eslint/config";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -23,6 +24,7 @@ export default defineConfig([
 
     plugins: {
       "check-file": checkFile,
+      n: n,
     },
 
     rules: {
@@ -47,6 +49,8 @@ export default defineConfig([
           "src/**": "KEBAB_CASE",
         },
       ],
+
+      "n/no-process-env": ["error"],
     },
   },
 ]);
