@@ -46,7 +46,7 @@ export default defineConfig([
       "check-file/folder-naming-convention": [
         "error",
         {
-          "src/**": "KEBAB_CASE",
+          "src/**": "NEXT_JS_APP_ROUTER_CASE",
         },
       ],
 

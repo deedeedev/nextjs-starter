@@ -18,7 +18,9 @@ import {
 import { APP_TITLE, NAVIGATION_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-import { ThemeToggle } from "../theme-toggle";
+import SignInButton from "./sign-in-button";
+import SignUpButton from "./sign-up-button";
+import { ThemeToggle } from "./theme-toggle";
 
 export default function AppNavbar() {
   return (
@@ -110,6 +112,9 @@ export default function AppNavbar() {
                         )}
                     </NavigationMenuItem>
                   ))}
+                  <NavigationMenuItem className="w-full">
+                    <SignInButton />
+                  </NavigationMenuItem>
                 </NavigationMenuList>
               </NavigationMenu>
             </PopoverContent>
@@ -200,12 +205,8 @@ export default function AppNavbar() {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm" className="text-sm">
-            <a href="#">Sign In</a>
-          </Button>
-          <Button asChild size="sm" className="text-sm">
-            <a href="#">Get Started</a>
-          </Button>
+          <SignInButton />
+          <SignUpButton />
           <ThemeToggle />
         </div>
       </div>
