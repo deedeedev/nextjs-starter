@@ -8,7 +8,7 @@ export default function SignUpButton() {
   const { signIn } = createAuthClient();
   return (
     <Button asChild size="sm" className="text-sm" onClick={() => signIn}>
-      <a href="#">Sign Up</a>
+      <a href="/sign-up">Sign Up</a>
     </Button>
   );
 }

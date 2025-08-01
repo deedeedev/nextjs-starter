@@ -6,8 +6,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 
-const users = pgTable("user", {
-  id: uuid("id").defaultRandom().primaryKey(),
+const user = pgTable("user", {
+  id: uuid("id").primaryKey().defaultRandom(),
   name: varchar("name", { length: 255 }).notNull(),
   email: varchar("email", { length: 320 }).notNull().unique(),
   emailVerified: boolean("email_verified")
@@ -22,4 +22,4 @@ const users = pgTable("user", {
     .notNull(),
 });
 
-export default users;
+export default user;
