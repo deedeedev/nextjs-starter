@@ -52,7 +52,6 @@ const VerifyEmailTemplate = ({
               </Text>
               <Text className="m-0 mb-[24px] text-[16px] text-gray-700">
                 This verification link will expire in 1 hour for security
-                purposes.
               </Text>
             </Section>
 
