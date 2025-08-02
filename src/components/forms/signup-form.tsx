@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -41,8 +40,6 @@ export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [isLoading, setIsLoading] = useState(false);
-
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,8 +58,6 @@ export function SignUpForm({
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-
     const { success, message } = await signUp(
       values.email,
       values.password,
@@ -77,8 +72,6 @@ export function SignUpForm({
     } else {
       toast.error(message as string);
     }
-
-    setIsLoading(false);
   }
 
   return (
@@ -170,8 +163,12 @@ export function SignUpForm({
                       </Link>
                     </div>
                   </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? (
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? (
                       <Loader2 className="size-4 animate-spin" />
                     ) : (
                       "Signup"
