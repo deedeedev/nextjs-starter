@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { signUp } from "@/actions/users";
+import { signIn } from "@/actions/users";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -31,12 +31,11 @@ import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
-  username: z.string().min(3),
   email: z.email(),
   password: z.string().min(8),
 });
 
-export function SignUpForm({
+export function SignInForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
@@ -44,7 +43,6 @@ export function SignUpForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
       email: "",
       password: "",
     },
@@ -58,16 +56,10 @@ export function SignUpForm({
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { success, message } = await signUp(
-      values.email,
-      values.password,
-      values.username
-    );
+    const { success, message } = await signIn(values.email, values.password);
 
     if (success) {
-      toast.success(
-        `${message as string} Please check your email for verification.`
-      );
+      toast.success(message as string);
       router.push("/dashboard");
     } else {
       toast.error(message as string);
@@ -79,7 +71,7 @@ export function SignUpForm({
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Signup with your Google account</CardDescription>
+          <CardDescription>Login with your Google account</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -98,7 +90,7 @@ export function SignUpForm({
                         fill="currentColor"
                       />
                     </svg>
-                    Signup with Google
+                    Login with Google
                   </Button>
                 </div>
                 <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
@@ -108,20 +100,6 @@ export function SignUpForm({
                 </div>
                 <div className="grid gap-6">
                   <div className="grid gap-3">
-                    <FormField
-                      control={form.control}
-                      name="username"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Username</FormLabel>
-                          <FormControl>
-                            <Input placeholder="username" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
                     <FormField
                       control={form.control}
                       name="email"
@@ -171,14 +149,14 @@ export function SignUpForm({
                     {form.formState.isSubmitting ? (
                       <Loader2 className="size-4 animate-spin" />
                     ) : (
-                      "Signup"
+                      "Login"
                     )}
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Already have an account?{" "}
-                  <Link href="/login" className="underline underline-offset-4">
-                    Login
+                  Don&apos;t have an account?{" "}
+                  <Link href="/signup" className="underline underline-offset-4">
+                    Sign up
                   </Link>
                 </div>
               </div>

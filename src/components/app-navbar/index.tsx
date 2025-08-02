@@ -18,8 +18,8 @@ import {
 import { APP_TITLE, NAVIGATION_LINKS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-import SignInButton from "./sign-in-button";
-import SignUpButton from "./sign-up-button";
+import SignInButton from "./signin-button";
+import SignUpButton from "./signup-button";
 import { ThemeToggle } from "./theme-toggle";
 
 export default function AppNavbar() {

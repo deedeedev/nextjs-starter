@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
@@ -10,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
-import { signIn } from "@/actions/users";
+import { signUp } from "@/actions/users";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -32,20 +31,20 @@ import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
+  username: z.string().min(3),
   email: z.email(),
   password: z.string().min(8),
 });
 
-export function SignInForm({
+export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const [isLoading, setIsLoading] = useState(false);
-
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      username: "",
       email: "",
       password: "",
     },
@@ -59,26 +58,28 @@ export function SignInForm({
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-
-    const { success, message } = await signIn(values.email, values.password);
+    const { success, message } = await signUp(
+      values.email,
+      values.password,
+      values.username
+    );
 
     if (success) {
-      toast.success(message as string);
+      toast.success(
+        `${message as string} Please check your email for verification.`
+      );
       router.push("/dashboard");
     } else {
       toast.error(message as string);
     }
-
-    setIsLoading(false);
   }
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader className="text-center">
-          <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>Login with your Google account</CardDescription>
+          <CardTitle className="text-xl">Welcome</CardTitle>
+          <CardDescription>Signup with your Google account</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -97,7 +98,7 @@ export function SignInForm({
                         fill="currentColor"
                       />
                     </svg>
-                    Login with Google
+                    Signup with Google
                   </Button>
                 </div>
                 <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
@@ -107,6 +108,20 @@ export function SignInForm({
                 </div>
                 <div className="grid gap-6">
                   <div className="grid gap-3">
+                    <FormField
+                      control={form.control}
+                      name="username"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Username</FormLabel>
+                          <FormControl>
+                            <Input placeholder="username" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
                     <FormField
                       control={form.control}
                       name="email"
@@ -148,18 +163,22 @@ export function SignInForm({
                       </Link>
                     </div>
                   </div>
-                  <Button type="submit" className="w-full" disabled={isLoading}>
-                    {isLoading ? (
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={form.formState.isSubmitting}
+                  >
+                    {form.formState.isSubmitting ? (
                       <Loader2 className="size-4 animate-spin" />
                     ) : (
-                      "Login"
+                      "Signup"
                     )}
                   </Button>
                 </div>
                 <div className="text-center text-sm">
-                  Don&apos;t have an account?{" "}
-                  <Link href="/signup" className="underline underline-offset-4">
-                    Sign up
+                  Already have an account?{" "}
+                  <Link href="/login" className="underline underline-offset-4">
+                    Login
                   </Link>
                 </div>
               </div>
